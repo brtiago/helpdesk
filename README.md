@@ -1,11 +1,8 @@
 # Helpdesk API
 A help desk api
 
-:
-
 <details>
   <summary>UML modeling</summary>
-
 ```mermaid
 classDiagram
     class Priority {
@@ -87,5 +84,6 @@ classDiagram
     Ticket o-- Status
     Ticket --> User
     Ticket --> Technician
+
 
 </details>
