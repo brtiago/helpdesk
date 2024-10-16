@@ -1,7 +1,10 @@
 # Helpdesk API
 A help desk api
 
-UML modeling:
+:
+
+<details>
+  <summary>UML modeling</summary>
 
 ```mermaid
 classDiagram
@@ -84,3 +87,5 @@ classDiagram
     Ticket o-- Status
     Ticket --> User
     Ticket --> Technician
+
+</details>
