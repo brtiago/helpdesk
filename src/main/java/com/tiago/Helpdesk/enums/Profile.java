@@ -1,15 +1,15 @@
-package com.tiago.Helpdesk.domain.enums;
+package com.tiago.Helpdesk.enums;
 
-public enum Status {
+public enum Profile {
 
-    OPEN(0, "OPEN"),
-    IN_PROGRESS(1, "IN PROGRESS"),
-    CLOSED(2, "CLOSED");
+    ADMIN(0, "ROLE_ADMIN"),
+    CLIENT(1, "ROLE_CLIENT"),
+    TECHNICIAN(2, "ROLE_TECHNICIAN");
     private Integer id;
     private String description;
 
 
-    Status(Integer id, String description) {
+    Profile(Integer id, String description) {
         this.id = id;
         this.description = description;
     }
@@ -23,18 +23,18 @@ public enum Status {
     }
 
     @SuppressWarnings("unused")
-    public static Status toEnum(Integer id) {
+    public static Profile toEnum(Integer id) {
         if(id == null) {
             if(id == null) {
                 return null;
             }
 
-            for (Status p : Status.values()) {
+            for (Profile p : Profile.values()) {
                 if (id.equals(p.getId())){
                     return p;
                 }
             }
         }
-        throw new IllegalArgumentException("Invalid status");
+        throw new IllegalArgumentException("Invalid profile");
     }
 }

@@ -1,15 +1,15 @@
-package com.tiago.Helpdesk.domain.enums;
+package com.tiago.Helpdesk.enums;
 
-public enum Profile {
+public enum Priority {
 
-    ADMIN(0, "ROLE_ADMIN"),
-    CLIENT(1, "ROLE_CLIENT"),
-    TECHNICIAN(2, "ROLE_TECHNICIAN");
+    LOW(0, "LOW"),
+    MEDIUM(1, "MEDIUM"),
+    HIGH(2, "HIGH");
     private Integer id;
     private String description;
 
 
-    Profile(Integer id, String description) {
+    Priority(Integer id, String description) {
         this.id = id;
         this.description = description;
     }
@@ -23,18 +23,18 @@ public enum Profile {
     }
 
     @SuppressWarnings("unused")
-    public static Profile toEnum(Integer id) {
+    public static Priority toEnum(Integer id) {
         if(id == null) {
             if(id == null) {
                 return null;
             }
 
-            for (Profile p : Profile.values()) {
+            for (Priority p : Priority.values()) {
                 if (id.equals(p.getId())){
                     return p;
                 }
             }
         }
-        throw new IllegalArgumentException("Invalid profile");
+        throw new IllegalArgumentException("Invalid priority");
     }
 }

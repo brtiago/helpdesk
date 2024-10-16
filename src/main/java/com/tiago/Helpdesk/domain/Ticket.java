@@ -1,7 +1,7 @@
 package com.tiago.Helpdesk.domain;
 
-import com.tiago.Helpdesk.domain.enums.Priority;
-import com.tiago.Helpdesk.domain.enums.Status;
+import com.tiago.Helpdesk.enums.Priority;
+import com.tiago.Helpdesk.enums.Status;
 
 import java.time.LocalDate;
 import java.util.Objects;

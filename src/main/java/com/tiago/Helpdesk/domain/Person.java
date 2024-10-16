@@ -1,7 +1,7 @@
 package com.tiago.Helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tiago.Helpdesk.domain.enums.Profile;
+import com.tiago.Helpdesk.enums.Profile;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
 

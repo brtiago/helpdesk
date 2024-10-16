@@ -1,6 +1,6 @@
 package com.tiago.Helpdesk.domain;
 
-import com.tiago.Helpdesk.domain.enums.Profile;
+import com.tiago.Helpdesk.enums.Profile;
 
 import java.util.Set;
 
