@@ -1,22 +1,34 @@
 package com.tiago.Helpdesk.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tiago.Helpdesk.enums.Priority;
 import com.tiago.Helpdesk.enums.Status;
+import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Ticket {
+@Entity
+public class Ticket implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate openedAt = LocalDate.now();
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate closedAt;
     private Priority priority;
     private Status status;
     private String title;
     private String notes;
 
+    @ManyToOne
+    @JoinColumn(name = "technician_id")
     private Technician technician;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Ticket(Integer id, Priority priority, Status status, String title, String notes, Technician technician, User user) {
