@@ -3,14 +3,15 @@ A help desk api
 
 UML modeling:
 
+```mermaid
 classDiagram
-class Priority {
-+Integer id
-+String description
-+Integer getId()
-+String getDescription()
-+static Priority toEnum(Integer id)
-}
+    class Priority {
+        +Integer id
+        +String description
+        +Integer getId()
+        +String getDescription()
+        +static Priority toEnum(Integer id)
+    }
 
     class Profile {
         +Integer id
@@ -83,4 +84,3 @@ class Priority {
     Ticket o-- Status
     Ticket --> User
     Ticket --> Technician
-
