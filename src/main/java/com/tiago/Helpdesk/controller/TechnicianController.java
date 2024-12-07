@@ -1,13 +1,13 @@
 package com.tiago.Helpdesk.controller;
 
+import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
 import com.tiago.Helpdesk.domain.Technician;
 import com.tiago.Helpdesk.service.TechnicianService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/technicians")
@@ -19,9 +19,23 @@ public class TechnicianController {
         this.technicianService = technicianService;
     }
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Technician> findById(@PathVariable Integer id) throws NoSuchMethodException {
+    public ResponseEntity<TechnicianDTO> findById(@PathVariable Integer id) {
         Technician technician = technicianService.findById(id);
-        return ResponseEntity.ok().body(technician);
+        TechnicianDTO technicianDTO = new TechnicianDTO(technician)
+        return ResponseEntity.ok().body(technicianDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TechnicianDTO>> findAll() {
+        var technicians = technicianService.findAll();
+        var techniciansDTO = technicians.stream().map(TechnicianDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok(techniciansDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<TechnicianDTO> create() {
+
+        return null;
     }
 
 }
