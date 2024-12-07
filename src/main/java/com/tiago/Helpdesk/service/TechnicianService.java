@@ -2,8 +2,12 @@ package com.tiago.Helpdesk.service;
 
 import com.tiago.Helpdesk.domain.Technician;
 import com.tiago.Helpdesk.repository.TechnicianRepository;
+import com.tiago.Helpdesk.service.exception.DatabaseException;
 import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TechnicianService {
@@ -22,6 +26,15 @@ public class TechnicianService {
     private void isIdValid(Integer id) {
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Invalid ID: " + id);
+        }
+    }
+
+    public List<Technician> findAll() {
+        try {
+            List<Technician> technicians = this.technicianRepository.findAll();
+            return technicians != null ? technicians : new ArrayList<>();
+        } catch (Exception e) {
+            throw new DatabaseException("Failed to fetch technicians");
         }
     }
 }
