@@ -21,8 +21,8 @@ public class User extends Person{
         addProfiles(Profile.CLIENT);
     }
 
-    public User(Integer id, String name, String cpf, String email, String password, Set<Integer> profiles) {
-        super(id, name, cpf, email, password, profiles);
+    public User(Integer id, String name, String cpf, String email, String password) {
+        super(id, name, cpf, email, password);
         addProfiles(Profile.CLIENT);
     }
 

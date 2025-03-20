@@ -35,13 +35,13 @@ public abstract class Person  implements Serializable {
         addProfiles(Profile.CLIENT);
     }
 
-    public Person(Integer id, String name, String cpf, String email, String password, Set<Integer> profiles) {
+    public Person(Integer id, String name, String cpf, String email, String password) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.email = email;
         this.password = password;
-        this.profiles = profiles;
+
         addProfiles(Profile.CLIENT);
     }
 

@@ -21,8 +21,8 @@ public class Technician extends Person{
         addProfiles(Profile.TECHNICIAN);
     }
 
-    public Technician(Integer id, String name, String cpf, String email, String password, Set<Integer> profiles) {
-        super(id, name, cpf, email, password, profiles);
+    public Technician(Integer id, String name, String cpf, String email, String password) {
+        super(id, name, cpf, email, password);
         addProfiles(Profile.TECHNICIAN);
     }
 
