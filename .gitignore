@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/java/com/tiago/Helpdesk/domain/RotateImage.java
+/mvnw
+/mvnw.cmd
+/.mvn/wrapper/maven-wrapper.properties

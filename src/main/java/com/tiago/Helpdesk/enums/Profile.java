@@ -14,27 +14,26 @@ public enum Profile {
         this.description = description;
     }
 
+    @SuppressWarnings("unused")
+    public static Profile toEnum(Integer id) {
+        if (id == null) {
+            return null;
+        }
+
+        for (Profile p : Profile.values()) {
+            if (id.equals(p.getId())) {
+                return p;
+            }
+        }
+
+        throw new IllegalArgumentException("Invalid profile");
+    }
+
     public Integer getId() {
         return id;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    @SuppressWarnings("unused")
-    public static Profile toEnum(Integer id) {
-        if(id == null) {
-            if(id == null) {
-                return null;
-            }
-
-            for (Profile p : Profile.values()) {
-                if (id.equals(p.getId())){
-                    return p;
-                }
-            }
-        }
-        throw new IllegalArgumentException("Invalid profile");
     }
 }

@@ -41,6 +41,10 @@ public class Ticket implements Serializable {
         this.user = user;
     }
 
+    public Ticket() {
+
+    }
+
     public Integer getId() {
         return id;
     }

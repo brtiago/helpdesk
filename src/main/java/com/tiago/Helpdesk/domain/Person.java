@@ -106,10 +106,10 @@ public abstract class Person  implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person person = (Person) obj;
         return id.equals(person.id) && Objects.equals(email, person.email) && createdAt.equals(person.createdAt);
     }
 
