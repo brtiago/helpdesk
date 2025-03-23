@@ -18,6 +18,7 @@ public class TechnicianController {
     public TechnicianController(TechnicianService technicianService){
         this.technicianService = technicianService;
     }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<TechnicianDTO> findById(@PathVariable Integer id) {
         Technician technician = technicianService.findById(id);
