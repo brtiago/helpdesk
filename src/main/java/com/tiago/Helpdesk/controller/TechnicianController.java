@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/technicians")
@@ -26,10 +25,10 @@ public class TechnicianController {
         return ResponseEntity.ok().body(technicianDTO);
     }
 
-    @GetMapping
+    @GetMapping(value = "/")
     public ResponseEntity<List<TechnicianDTO>> findAll() {
         var technicians = technicianService.findAll();
-        var techniciansDTO = technicians.stream().map(TechnicianDTO::new).collect(Collectors.toList());
+        var techniciansDTO = technicians.stream().map(TechnicianDTO::new).toList();
         return ResponseEntity.ok(techniciansDTO);
     }
 
