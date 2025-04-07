@@ -5,6 +5,7 @@ import com.tiago.Helpdesk.domain.Technician;
 import com.tiago.Helpdesk.service.TechnicianService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -32,10 +33,12 @@ public class TechnicianController {
         return ResponseEntity.ok(techniciansDTO);
     }
 
-    @PostMapping
-    public ResponseEntity<TechnicianDTO> create() {
+    @PostMapping("/create")
+    public ResponseEntity<TechnicianDTO> create(@RequestBody TechnicianDTO technicianDTO, UriComponentsBuilder uriComponentsBuilder) {
+        var technician = technicianService.create(technicianDTO);
 
-        return null;
+        var uri = uriComponentsBuilder.path("/technicians/{id}").buildAndExpand(technician.getId()).toUri();
+        return ResponseEntity.created(uri).body(new TechnicianDTO(technician));
     }
 
 }

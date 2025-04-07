@@ -1,5 +1,6 @@
 package com.tiago.Helpdesk.service;
 
+import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
 import com.tiago.Helpdesk.domain.Technician;
 import com.tiago.Helpdesk.repository.TechnicianRepository;
 import com.tiago.Helpdesk.service.exception.DatabaseException;
@@ -45,4 +46,11 @@ public class TechnicianService {
             throw new DatabaseException("Failed to fetch technicians");
         }
     }
+
+    public Technician create(TechnicianDTO technicianDTO) {
+        var newTechnician = new Technician(technicianDTO);
+        technicianRepository.save(newTechnician);
+        return newTechnician;
+    }
+
 }

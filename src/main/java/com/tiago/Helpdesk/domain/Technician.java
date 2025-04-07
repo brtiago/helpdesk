@@ -1,6 +1,7 @@
 package com.tiago.Helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
 import com.tiago.Helpdesk.enums.Profile;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -18,6 +19,15 @@ public class Technician extends Person{
 
     public Technician() {
         super();
+        addProfiles(Profile.TECHNICIAN);
+    }
+
+    public Technician(TechnicianDTO technicianDTO) {
+        id = technicianDTO.id();
+        name = technicianDTO.name();
+        cpf = technicianDTO.cpf();
+        email = technicianDTO.email();
+        password = technicianDTO.password();
         addProfiles(Profile.TECHNICIAN);
     }
 
