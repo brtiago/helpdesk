@@ -2,12 +2,12 @@ package com.tiago.Helpdesk.service;
 
 import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
 import com.tiago.Helpdesk.domain.Technician;
+import com.tiago.Helpdesk.repository.PersonRepository;
 import com.tiago.Helpdesk.repository.TechnicianRepository;
-import com.tiago.Helpdesk.service.exception.DatabaseException;
 import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +16,11 @@ import java.util.Optional;
 public class TechnicianService {
 
     private final TechnicianRepository technicianRepository;
+    private final PersonRepository personRepository;
 
-    public TechnicianService(TechnicianRepository technicianRepository){
+    public TechnicianService(TechnicianRepository technicianRepository, PersonRepository personRepository){
         this.technicianRepository = technicianRepository;
+        this.personRepository = personRepository;
     }
 
     public Technician findById(Integer id) {
@@ -39,18 +41,35 @@ public class TechnicianService {
      }
 
     public List<Technician> findAll() {
-        try {
-            List<Technician> technicians = this.technicianRepository.findAll();
-            return technicians != null ? technicians : new ArrayList<>();
-        } catch (Exception e) {
-            throw new DatabaseException("Failed to fetch technicians");
-        }
+        return technicianRepository.findAll();
     }
 
     public Technician create(TechnicianDTO technicianDTO) {
-        var newTechnician = new Technician(technicianDTO);
-        technicianRepository.save(newTechnician);
-        return newTechnician;
+        if (technicianDTO == null) {
+            throw new IllegalArgumentException("TechnicianDTO cannot be null");
+        }
+
+        validateCpfEmail(technicianDTO);
+        return technicianRepository.save(new Technician(technicianDTO));
     }
+
+    private void validateCpfEmail(TechnicianDTO technicianDTO) {
+
+        personRepository.findByCpf(technicianDTO.cpf())
+                .ifPresent(person -> {
+                    if (technicianDTO.id() == null || !person.getId().equals(technicianDTO.id())) {
+                        throw new DataIntegrityViolationException("CPF já cadastrado!");
+                    }
+                });
+
+        personRepository.findByEmail(technicianDTO.email())
+                .ifPresent(person -> {
+                    if (technicianDTO.id() == null || !person.getId().equals(technicianDTO.id())) {
+                        throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
+                    }
+                });
+    }
+
+
 
 }
