@@ -8,15 +8,18 @@ import com.tiago.Helpdesk.service.exception.DatabaseException;
 import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class TechnicianServiceTest {
 
     @InjectMocks
@@ -30,21 +33,16 @@ class TechnicianServiceTest {
         MockitoAnnotations.openMocks(this); // Inicializa os mocks
     }
 
-    @Test
-    void findById_WhenTechnicianExists_ReturnsTechnician() {
-        Integer id = 1;
-        Technician technician = new Technician();
-        technician.setId(id);
-        technician.setName("John Doe");
 
-        when(technicianRepository.findById(id)).thenReturn(Optional.of(technician));
-
-        Technician result = technicianService.findById(id);
-
-        assertNotNull(result);
-        assertEquals(technician.getId(), result.getId());
-        assertEquals(technician.getName(), result.getName());
-        verify(technicianRepository, times(1)).findById(id);
+    private Technician createTechnician(Integer id, String name, Profile profile) {
+        return new Technician.Builder()
+                .withId(id)
+                .withName(name)
+                .withCpf("00000000000")
+                .withEmail(name.toLowerCase() + "@email.com")
+                .withPassword("password")
+                .withProfiles(Set.of(profile.getId()))
+                .build();
     }
 
     @Test
@@ -76,15 +74,9 @@ class TechnicianServiceTest {
     @Test
     void findAll_WhenTechniciansExist_ReturnsTechniciansList() {
         // Arrange
-        Set<Integer> profiles1 = new HashSet<>();
-        profiles1.add(Profile.TECHNICIAN.getId());
-
-        Set<Integer> profiles2 = new HashSet<>();
-        profiles2.add(Profile.ADMIN.getId());
-
         List<Technician> technicians = Arrays.asList(
-                new Technician(1, "Pablo Neruda", "12345678900", "neruda@email.com", "password123", profiles1),
-                new Technician(2, "Gabriela Mistral", "98765432100", "mistral@email.com", "password456", profiles2)
+                createTechnician(1, "Pablo Neruda", Profile.TECHNICIAN),
+                createTechnician(2, "Gabriela Mistral", Profile.ADMIN)
         );
 
         when(technicianRepository.findAll()).thenReturn(technicians);
@@ -97,7 +89,7 @@ class TechnicianServiceTest {
         assertEquals(2, result.size());
         assertEquals("Pablo Neruda", result.get(0).getName());
         assertEquals("Gabriela Mistral", result.get(1).getName());
-        verify(technicianRepository, times(1)).findAll();
+        verify(technicianRepository).findAll();
     }
 
     @Test

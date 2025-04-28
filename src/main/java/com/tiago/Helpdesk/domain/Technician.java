@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,49 @@ public class Technician extends Person{
     @JsonIgnore
     @OneToMany(mappedBy = "technician")
     private List<Ticket> tickets = new ArrayList<>();
+
+    public static class Builder {
+        private Integer id;
+        private String name;
+        private String cpf;
+        private String email;
+        private String password;
+        private Set<Integer> profiles = new HashSet<>();
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withCpf(String cpf) {
+            this.cpf = cpf;
+            return this;
+        }
+
+        public Builder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder withProfiles(Set<Integer> profiles) {
+            this.profiles = profiles;
+            return this;
+        }
+
+        public Technician build() {
+            return new Technician(id, name, cpf, email, password, profiles);
+        }
+    }
 
     public Technician() {
         super();
@@ -29,6 +73,11 @@ public class Technician extends Person{
         email = technicianDTO.email();
         password = technicianDTO.password();
         addProfiles(Profile.TECHNICIAN);
+    }
+
+    public Technician(Integer id, String name, String cpf, String email, String password, Set<Integer> profiles) {
+        super(id, name, cpf, email, password);
+        this.profiles = profiles;
     }
 
     public Technician(Integer id, String name, String cpf, String email, String password) {
