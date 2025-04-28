@@ -1,13 +1,21 @@
 package com.tiago.Helpdesk.controller;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
 import com.tiago.Helpdesk.domain.Technician;
 import com.tiago.Helpdesk.service.TechnicianService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/technicians")
@@ -33,8 +41,8 @@ public class TechnicianController {
         return ResponseEntity.ok(techniciansDTO);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<TechnicianDTO> create(@RequestBody TechnicianDTO technicianDTO, UriComponentsBuilder uriComponentsBuilder) {
+    @PostMapping
+    public ResponseEntity<TechnicianDTO> create(@Valid @RequestBody TechnicianDTO technicianDTO, UriComponentsBuilder uriComponentsBuilder) {
         var technician = technicianService.create(technicianDTO);
 
         var uri = uriComponentsBuilder.path("/technicians/{id}").buildAndExpand(technician.getId()).toUri();
