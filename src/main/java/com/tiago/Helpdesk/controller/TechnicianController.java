@@ -3,12 +3,7 @@ package com.tiago.Helpdesk.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
@@ -48,5 +43,17 @@ public class TechnicianController {
         var uri = uriComponentsBuilder.path("/technicians/{id}").buildAndExpand(technician.getId()).toUri();
         return ResponseEntity.created(uri).body(new TechnicianDTO(technician));
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<TechnicianDTO> update(@PathVariable Integer id, @Valid @RequestBody TechnicianDTO technicianDTO) {
+        if (!id.equals(technicianDTO.id())) {
+            throw new IllegalArgumentException("ID na URL não corresponde ao ID no corpo");
+        }
+
+        Technician updatedTechnician = technicianService.update(id, technicianDTO);
+        return ResponseEntity.ok(new TechnicianDTO(updatedTechnician));
+    }
+
+
 
 }

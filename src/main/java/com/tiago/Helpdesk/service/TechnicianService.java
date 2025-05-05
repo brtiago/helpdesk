@@ -53,6 +53,18 @@ public class TechnicianService {
         return technicianRepository.save(new Technician(technicianDTO));
     }
 
+    public Technician update(Integer id, TechnicianDTO technicianDTO) {
+        validateCpfEmail(technicianDTO);
+        Technician existingTechnician = findId(id);
+
+        existingTechnician.setName(technicianDTO.name());
+        existingTechnician.setCpf(technicianDTO.cpf());
+        existingTechnician.setEmail(technicianDTO.email());
+        existingTechnician.setPassword(technicianDTO.password());
+
+        return technicianRepository.save(existingTechnician);
+    }
+
     private void validateCpfEmail(TechnicianDTO technicianDTO) {
 
         personRepository.findByCpf(technicianDTO.cpf())
