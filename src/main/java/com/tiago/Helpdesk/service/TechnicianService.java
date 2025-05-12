@@ -9,7 +9,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -35,11 +34,6 @@ public class TechnicianService {
         }
     }
 
-     public Technician findId(Integer id) {
-        Optional<Technician> technician = technicianRepository.findById(id);
-        return technician.orElse(null);
-     }
-
     public List<Technician> findAll() {
         return technicianRepository.findAll();
     }
@@ -55,7 +49,7 @@ public class TechnicianService {
 
     public Technician update(Integer id, TechnicianDTO technicianDTO) {
         validateCpfEmail(technicianDTO);
-        Technician existingTechnician = findId(id);
+        Technician existingTechnician = findById(id);
 
         existingTechnician.setName(technicianDTO.name());
         existingTechnician.setCpf(technicianDTO.cpf());
@@ -83,5 +77,12 @@ public class TechnicianService {
     }
 
 
+    public void delete(Integer id) {
+        Technician technicianFound = findById(id);
+        if (technicianFound.getTickets().size() > 0) {
+            throw new DataIntegrityViolationException("Técnico possui incidentes relacionados e não pode ser excluído!");
+        }
 
+        technicianRepository.deleteById(id);
+    }
 }
