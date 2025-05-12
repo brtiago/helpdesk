@@ -20,7 +20,7 @@ public class TechnicianResource {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Technician> findById(@PathVariable Integer id) {
-        Technician technician = technicianService.findId(id);
+        Technician technician = technicianService.findById(id);
 
         return ResponseEntity.ok().body(technician);
     }
