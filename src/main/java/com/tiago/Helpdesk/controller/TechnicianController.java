@@ -29,7 +29,7 @@ public class TechnicianController {
         return ResponseEntity.ok().body(technicianDTO);
     }
 
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<List<TechnicianDTO>> findAll() {
         var technicians = technicianService.findAll();
         var techniciansDTO = technicians.stream().map(TechnicianDTO::new).toList();
