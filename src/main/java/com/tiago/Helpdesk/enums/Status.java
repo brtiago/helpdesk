@@ -25,16 +25,15 @@ public enum Status {
     @SuppressWarnings("unused")
     public static Status toEnum(Integer id) {
         if(id == null) {
-            if(id == null) {
-                return null;
-            }
+            return null;
+        }
 
-            for (Status p : Status.values()) {
-                if (id.equals(p.getId())){
-                    return p;
-                }
+        for (Status p : Status.values()) {
+            if (id.equals(p.getId())){
+                return p;
             }
         }
+
         throw new IllegalArgumentException("Invalid status");
     }
 }

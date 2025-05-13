@@ -25,16 +25,15 @@ public enum Priority {
     @SuppressWarnings("unused")
     public static Priority toEnum(Integer id) {
         if(id == null) {
-            if(id == null) {
-                return null;
-            }
+            return null;
+        }
 
-            for (Priority p : Priority.values()) {
-                if (id.equals(p.getId())){
-                    return p;
-                }
+        for (Priority p : Priority.values()) {
+            if (id.equals(p.getId())){
+                return p;
             }
         }
+
         throw new IllegalArgumentException("Invalid priority");
     }
 }
