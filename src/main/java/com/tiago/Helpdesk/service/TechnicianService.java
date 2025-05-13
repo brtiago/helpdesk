@@ -4,6 +4,7 @@ import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
 import com.tiago.Helpdesk.domain.Technician;
 import com.tiago.Helpdesk.repository.PersonRepository;
 import com.tiago.Helpdesk.repository.TechnicianRepository;
+import com.tiago.Helpdesk.service.exception.DatabaseException;
 import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -79,10 +80,16 @@ public class TechnicianService {
 
     public void delete(Integer id) {
         Technician technicianFound = findById(id);
-        if (technicianFound.getTickets().size() > 0) {
-            throw new DataIntegrityViolationException("Técnico possui incidentes relacionados e não pode ser excluído!");
+
+        if(!technicianFound.getTickets().isEmpty()){
+            throw new DataIntegrityViolationException("Technician cannot be deleted because it has associated tickets!");
         }
 
-        technicianRepository.deleteById(id);
+        try {
+            technicianRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new DatabaseException("Error deleting technician");
+        }
+
     }
 }
