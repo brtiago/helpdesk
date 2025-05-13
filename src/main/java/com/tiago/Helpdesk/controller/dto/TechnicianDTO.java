@@ -2,20 +2,22 @@ package com.tiago.Helpdesk.controller.dto;
 
 import com.tiago.Helpdesk.domain.Technician;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.Set;
 
 public record TechnicianDTO(
         Integer id,
-        @NotNull(message = "The field Name is required.")
+        @NotBlank(message = "Name cannot be blank")
         String name,
-        @NotNull(message = "The field Cpf is required.")
+        @NotBlank(message = "CPF cannot be blank")
         String cpf,
-        @NotNull(message = "The field Email is required.")
-        @Email
+        @NotBlank(message = "Email cannot be blank")
+        @Email(message = "Invalid email format")
         String email,
-        @NotNull
+        @NotBlank(message = "Password cannot be blank")
+        @Size(min = 8, message = "Password must be at least 8 characters")
         String password
         ) {
 
