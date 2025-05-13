@@ -55,7 +55,7 @@ public class TechnicianController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<TechnicianDTO> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         technicianService.delete(id);
         return ResponseEntity.noContent().build();
     }
