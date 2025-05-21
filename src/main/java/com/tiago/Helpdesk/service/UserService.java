@@ -1,5 +1,6 @@
 package com.tiago.Helpdesk.service;
 
+import com.tiago.Helpdesk.controller.dto.UserDTO;
 import com.tiago.Helpdesk.domain.User;
 import com.tiago.Helpdesk.repository.PersonRepository;
 import com.tiago.Helpdesk.repository.UserRepository;
@@ -9,7 +10,7 @@ import java.lang.module.ResolutionException;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService extends BaseService{
     private final UserRepository userRepository;
     private final PersonRepository personRepository;
 
@@ -25,7 +26,7 @@ public class UserService {
     }
 
     public User findById(Integer id) {
-        isIdValid(id);
+        validateId(id, "user");
         return userRepository.findById(id).
                 orElseThrow(() -> new ResolutionException("User not found for ID: " + id));
     }
@@ -33,4 +34,5 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
 }
