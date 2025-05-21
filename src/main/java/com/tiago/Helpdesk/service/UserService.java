@@ -5,6 +5,7 @@ import com.tiago.Helpdesk.domain.User;
 import com.tiago.Helpdesk.repository.PersonRepository;
 import com.tiago.Helpdesk.repository.UserRepository;
 import com.tiago.Helpdesk.service.exception.DatabaseException;
+import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.lang.module.ResolutionException;
@@ -22,7 +23,7 @@ public class UserService extends BaseService{
     public User findById(Integer id) {
         validateId(id, "user");
         return userRepository.findById(id).
-                orElseThrow(() -> new ResolutionException("User not found for ID: " + id));
+                orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + id));
     }
 
     public List<User> findAll() {
