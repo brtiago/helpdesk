@@ -44,7 +44,7 @@ public class TechnicianService extends BaseService {
     }
 
     public Technician update(Integer id, TechnicianDTO technicianDTO) {
-        validateCpfEmail(technicianDTO);
+        validateCpfEmail(technicianDTO.id(), technicianDTO.cpf(), technicianDTO.email());
         Technician existingTechnician = findById(id);
 
         existingTechnician.setName(technicianDTO.name());

@@ -19,12 +19,6 @@ public class UserService extends BaseService{
         this.personRepository = personRepository;
     }
 
-    private void isIdValid(Integer id) {
-        if(id == null || id <= 0) {
-            throw new IllegalArgumentException("Invalid user id: " + id);
-        }
-    }
-
     public User findById(Integer id) {
         validateId(id, "user");
         return userRepository.findById(id).
@@ -35,4 +29,12 @@ public class UserService extends BaseService{
         return userRepository.findAll();
     }
 
+    public User create (UserDTO userDTO) {
+        if(userDTO == null) {
+            throw new IllegalArgumentException("UserDTO cannot be null");
+        }
+
+        validateCpfEmail(userDTO.id(), userDTO.cpf(), userDTO.email());
+        return userRepository.save(new User(userDTO));
+    }
 }

@@ -1,20 +1,20 @@
 package com.tiago.Helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tiago.Helpdesk.controller.dto.UserDTO;
 import com.tiago.Helpdesk.enums.Profile;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class User extends Person{
     private static final long serialVersionUID = 1L;
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private List<Ticket> tickets = new ArrayList<>();
+    private final List<Ticket> tickets = new ArrayList<>();
 
     public User() {
         super();
@@ -26,11 +26,13 @@ public class User extends Person{
         addProfiles(Profile.CLIENT);
     }
 
-    public List<Ticket> getTickets() {
-        return tickets;
+    public User(UserDTO userDTO) {
+        id = userDTO.id();
+        name = userDTO.name();
+        cpf = userDTO.cpf();
+        email = userDTO.email();
+        password = userDTO.password();
+        addProfiles(Profile.CLIENT);
     }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
-    }
 }
