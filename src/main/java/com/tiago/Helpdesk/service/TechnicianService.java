@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Service
-public class TechnicianService {
+public class TechnicianService extends BaseService {
 
     private final TechnicianRepository technicianRepository;
     private final PersonRepository personRepository;
@@ -24,15 +24,9 @@ public class TechnicianService {
     }
 
     public Technician findById(Integer id) {
-        isIdValid(id);
+        validateId(id, "technician");
         return technicianRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Technician not found for ID: " + id));
-    }
-
-    private void isIdValid(Integer id) {
-        if (id == null || id <= 0) {
-            throw new IllegalArgumentException("Invalid ID: " + id);
-        }
     }
 
     public List<Technician> findAll() {
