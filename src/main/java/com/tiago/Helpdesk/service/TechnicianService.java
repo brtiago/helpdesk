@@ -19,6 +19,7 @@ public class TechnicianService extends BaseService {
     private final PersonRepository personRepository;
 
     public TechnicianService(TechnicianRepository technicianRepository, PersonRepository personRepository){
+
         this.technicianRepository = technicianRepository;
         this.personRepository = personRepository;
     }
@@ -38,7 +39,7 @@ public class TechnicianService extends BaseService {
             throw new IllegalArgumentException("TechnicianDTO cannot be null");
         }
 
-        validateCpfEmail(technicianDTO);
+        validateCpfEmail(technicianDTO.id(), technicianDTO.cpf(), technicianDTO.email());
         return technicianRepository.save(new Technician(technicianDTO));
     }
 
@@ -53,24 +54,6 @@ public class TechnicianService extends BaseService {
 
         return technicianRepository.save(existingTechnician);
     }
-
-    private void validateCpfEmail(TechnicianDTO technicianDTO) {
-
-        personRepository.findByCpf(technicianDTO.cpf())
-                .ifPresent(person -> {
-                    if (technicianDTO.id() == null || !person.getId().equals(technicianDTO.id())) {
-                        throw new DataIntegrityViolationException("CPF já cadastrado!");
-                    }
-                });
-
-        personRepository.findByEmail(technicianDTO.email())
-                .ifPresent(person -> {
-                    if (technicianDTO.id() == null || !person.getId().equals(technicianDTO.id())) {
-                        throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
-                    }
-                });
-    }
-
 
     public void delete(Integer id) {
         Technician technicianFound = findById(id);
