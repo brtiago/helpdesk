@@ -7,7 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User extends Person{
@@ -15,6 +17,53 @@ public class User extends Person{
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private final List<Ticket> tickets = new ArrayList<>();
+
+    public User(Integer id, String name, String cpf, String email, String password, Set<Integer> roles) {
+    }
+
+    public static class Builder {
+        private Integer id;
+        private String name;
+        private String cpf;
+        private String email;
+        private String password;
+        private Set<Integer> roles = new HashSet<>();
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withCpf(String cpf) {
+            this.cpf = cpf;
+            return this;
+        }
+
+        public Builder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder withProfiles(Set<Integer> roles) {
+            this.roles = roles;
+            return this;
+        }
+
+        public User build() {
+            return new User(id, name, cpf, email, password, roles);
+        }
+
+    }
 
     public User() {
         super();
