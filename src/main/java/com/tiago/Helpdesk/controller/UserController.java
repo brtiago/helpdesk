@@ -5,6 +5,7 @@ import com.tiago.Helpdesk.domain.User;
 import com.tiago.Helpdesk.repository.UserRepository;
 import com.tiago.Helpdesk.service.UserService;
 import jakarta.validation.Valid;
+import org.apache.coyote.BadRequestException;
 import org.hibernate.validator.internal.constraintvalidators.bv.size.SizeValidatorForArray;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,6 +57,22 @@ public class UserController {
         var uri = uriComponentsBuilder.path("/users/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(new UserDTO(user));
 
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable Integer id, @Valid @RequestBody UserDTO userDTO) {
+        if (!id.equals(userDTO.id())) {
+            throw new IllegalArgumentException("id mismatch");
+        }
+
+        User updatedUser = userService.update(id, userDTO);
+        return ResponseEntity.ok(new UserDTO(updatedUser));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 
