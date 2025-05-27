@@ -1,46 +1,47 @@
 package com.tiago.Helpdesk.service;
 
 import com.tiago.Helpdesk.controller.dto.UserDTO;
+import com.tiago.Helpdesk.controller.dto.UserRequest;
 import com.tiago.Helpdesk.domain.User;
-import com.tiago.Helpdesk.repository.PersonRepository;
 import com.tiago.Helpdesk.repository.UserRepository;
 import com.tiago.Helpdesk.service.exception.DatabaseException;
 import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.lang.module.ResolutionException;
-import java.util.List;
-
 @Service
-public class UserService extends BaseService{
+public class UserService {
     private final UserRepository userRepository;
+    private final ValidationService validationService;
 
-    public UserService(UserRepository userRepository, PersonRepository personRepository) {
+    public UserService(UserRepository userRepository, ValidationService validationService) {
         this.userRepository = userRepository;
-        this.personRepository = personRepository;
+        this.validationService = validationService;
     }
 
     public User findById(Integer id) {
-        validateId(id, "user");
+        validationService.validateId(id, "user");
         return userRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + id));
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(Pageable pageable) {
+
+        return userRepository.findAll(pageable);
     }
 
-    public User create (UserDTO userDTO) {
-        if(userDTO == null) {
-            throw new IllegalArgumentException("UserDTO cannot be null");
+    public User create (UserRequest userRequest) {
+        if(userRequest == null) {
+            throw new IllegalArgumentException("UserRequest cannot be null");
         }
 
-        validateCpfEmail(userDTO.id(), userDTO.cpf(), userDTO.email());
-        return userRepository.save(new User(userDTO));
+        validationService.validateCpfEmail(userRequest.id(), userRequest.cpf(), userRequest.email());
+        return userRepository.save(new User(userRequest));
     }
 
     public User update (Integer id, UserDTO userDTO) {
-        validateCpfEmail(userDTO.id(), userDTO.cpf(), userDTO.email());
+        validationService.validateCpfEmail(userDTO.id(), userDTO.cpf(), userDTO.email());
         User existingUser = findById(id);
 
         existingUser.setName(userDTO.name());

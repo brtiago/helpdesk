@@ -2,7 +2,6 @@ package com.tiago.Helpdesk.service;
 
 import com.tiago.Helpdesk.controller.dto.TechnicianDTO;
 import com.tiago.Helpdesk.domain.Technician;
-import com.tiago.Helpdesk.repository.PersonRepository;
 import com.tiago.Helpdesk.repository.TechnicianRepository;
 import com.tiago.Helpdesk.service.exception.DatabaseException;
 import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
@@ -13,19 +12,19 @@ import java.util.List;
 
 
 @Service
-public class TechnicianService extends BaseService {
+public class TechnicianService {
 
     private final TechnicianRepository technicianRepository;
-    private final PersonRepository personRepository;
+    private final ValidationService validationService;
 
-    public TechnicianService(TechnicianRepository technicianRepository, PersonRepository personRepository){
+    public TechnicianService(TechnicianRepository technicianRepository, ValidationService validationService) {
 
         this.technicianRepository = technicianRepository;
-        this.personRepository = personRepository;
+        this.validationService = validationService;
     }
 
     public Technician findById(Integer id) {
-        validateId(id, "technician");
+        validationService.validateId(id, "technician");
         return technicianRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Technician not found for ID: " + id));
     }
@@ -39,12 +38,12 @@ public class TechnicianService extends BaseService {
             throw new IllegalArgumentException("TechnicianDTO cannot be null");
         }
 
-        validateCpfEmail(technicianDTO.id(), technicianDTO.cpf(), technicianDTO.email());
+        validationService.validateCpfEmail(technicianDTO.id(), technicianDTO.cpf(), technicianDTO.email());
         return technicianRepository.save(new Technician(technicianDTO));
     }
 
     public Technician update(Integer id, TechnicianDTO technicianDTO) {
-        validateCpfEmail(technicianDTO.id(), technicianDTO.cpf(), technicianDTO.email());
+        validationService.validateCpfEmail(technicianDTO.id(), technicianDTO.cpf(), technicianDTO.email());
         Technician existingTechnician = findById(id);
 
         existingTechnician.setName(technicianDTO.name());
