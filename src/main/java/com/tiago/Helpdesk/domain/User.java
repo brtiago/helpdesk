@@ -1,7 +1,7 @@
 package com.tiago.Helpdesk.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tiago.Helpdesk.controller.dto.UserDTO;
+import com.tiago.Helpdesk.controller.dto.UserRequest;
 import com.tiago.Helpdesk.enums.Profile;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -75,12 +75,12 @@ public class User extends Person{
         addProfiles(Profile.CLIENT);
     }
 
-    public User(UserDTO userDTO) {
-        id = userDTO.id();
-        name = userDTO.name();
-        cpf = userDTO.cpf();
-        email = userDTO.email();
-        password = userDTO.password();
+    public User(UserRequest userRequest) {
+        id = userRequest.id();
+        name = userRequest.name();
+        cpf = userRequest.cpf();
+        email = userRequest.email();
+        password = userRequest.password();
         addProfiles(Profile.CLIENT);
     }
 
