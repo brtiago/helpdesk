@@ -2,26 +2,24 @@ package com.tiago.Helpdesk.service;
 
 import com.tiago.Helpdesk.repository.PersonRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
-public abstract class BaseService {
+@Service
+public class ValidationService {
 
     protected PersonRepository personRepository;
 
-    protected BaseService(PersonRepository personRepository) {
+    protected ValidationService(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
 
-    protected BaseService() {
-
-    }
-
-    protected void validateId(Integer id, String entityName){
+    public void validateId(Integer id, String entityName){
         if (id == null || id <= 0) {
             throw new IllegalArgumentException("Invalid " + entityName + " ID: " + id);
         }
     }
 
-    protected void validateCpfEmail(Integer id, String cpf, String email ) {
+    public void validateCpfEmail(Integer id, String cpf, String email ) {
         personRepository.findByCpf(cpf)
                 .ifPresent(person -> {
                     if (id == null || !person.getId().equals(id)) {
