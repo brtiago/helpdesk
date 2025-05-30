@@ -6,6 +6,7 @@ import com.tiago.Helpdesk.enums.Profile;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +28,8 @@ public class User extends Person{
         private String cpf;
         private String email;
         private String password;
-        private Set<Integer> roles = new HashSet<>();
+        private Set<Integer> profiles = new HashSet<>();
+        private LocalDate createdAt;
 
         public Builder withId(Integer id) {
             this.id = id;
@@ -55,12 +57,12 @@ public class User extends Person{
         }
 
         public Builder withProfiles(Set<Integer> roles) {
-            this.roles = roles;
+            this.profiles = roles;
             return this;
         }
 
         public User build() {
-            return new User(id, name, cpf, email, password, roles);
+            return new User(id, name, cpf, email, password, profiles);
         }
 
     }

@@ -22,4 +22,18 @@ public record UserDTO(
     public UserDTO(User user) {
         this(user.getId(), user.getName(), user.getCpf(), user.getEmail(), user.getPassword());
     }
+
+    public UserDTO(Integer id, String name, String cpf, String email) {
+        this(id, name, cpf, email, null);
+    }
+
+    public static UserDTO fromUser(User user) {
+        return new UserDTO(
+                user.getId(),
+                user.getName(),
+                user.getCpf(),
+                user.getEmail()
+        );
+    }
+
 }

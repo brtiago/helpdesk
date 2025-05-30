@@ -6,9 +6,11 @@ import com.tiago.Helpdesk.domain.User;
 import com.tiago.Helpdesk.repository.UserRepository;
 import com.tiago.Helpdesk.service.exception.DatabaseException;
 import com.tiago.Helpdesk.service.exception.ResourceNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
@@ -20,45 +22,60 @@ public class UserService {
         this.validationService = validationService;
     }
 
-    public User findById(Integer id) {
-        validationService.validateId(id, "user");
-        return userRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + id));
+    public UserDTO findById(Integer id) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + id));
+        return new UserDTO(existingUser.getId(), existingUser.getName(), existingUser.getCpf(), existingUser.getEmail()
+        );
     }
 
-    public Page<User> findAll(Pageable pageable) {
-
-        return userRepository.findAll(pageable);
+    public Page<UserDTO> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(UserDTO::new);
     }
 
-    public User create (UserRequest userRequest) {
+    public UserDTO create (UserRequest userRequest) {
         if(userRequest == null) {
             throw new IllegalArgumentException("UserRequest cannot be null");
         }
 
-        validationService.validateCpfEmail(userRequest.id(), userRequest.cpf(), userRequest.email());
-        return userRepository.save(new User(userRequest));
+        validationService.validateCpfEmail(null, userRequest.cpf(), userRequest.email());
+
+        User user = new User();
+        user.setName(userRequest.name());
+        user.setEmail(userRequest.email());
+        user.setCpf(userRequest.cpf());
+        user.setPassword(userRequest.password());
+
+        User savedUser= userRepository.save(user);
+
+        return new UserDTO(savedUser.getId(), savedUser.getName(), savedUser.getCpf(), savedUser.getEmail());
     }
 
-    public User update (Integer id, UserDTO userDTO) {
-        validationService.validateCpfEmail(userDTO.id(), userDTO.cpf(), userDTO.email());
-        User existingUser = findById(id);
+    public UserDTO update (Integer id, UserDTO userDTO) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found for ID: " + id));
+
+        validationService.validateCpfEmail(existingUser.getId(), existingUser.getCpf(), existingUser.getEmail());
+
 
         existingUser.setName(userDTO.name());
         existingUser.setCpf(userDTO.cpf());
         existingUser.setEmail(userDTO.email());
         existingUser.setPassword(userDTO.password());
 
-        return userRepository.save(existingUser);
+        User updatedUser = userRepository.save(existingUser);
+
+        return UserDTO.fromUser(updatedUser);
     }
 
     public void delete(Integer id) {
-        User userFound = findById(id);
-
         try {
             userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("User not found for ID: " + id);
         } catch (Exception e) {
-            throw new DatabaseException("Error deleting user");
+            throw new DatabaseException("Failed to delete user with ID: " + id + ". Reason: " + e.getMessage());
         }
     }
 }
